@@ -8,13 +8,20 @@ import reactor.core.publisher.Mono;
  * Created by jt on 2/27/21.
  */
 public class PersonRepositoryImpl implements PersonRepository {
+
+    Person mike = new Person(1,"Mike","Doe");
+    Person sanaz = new Person(2,"Sanaz","Bon");
+
     @Override
     public Mono<Person> getById(Integer id) {
-        return null;
+        Flux<Person> personFlux = findAll();
+        Mono<Person> personMono = personFlux.filter(person -> person.getId() == id).next();
+        return Mono.justOrEmpty(personMono.block());
+        //return findAll().filter(person -> person.getId() == id).next();
     }
 
     @Override
     public Flux<Person> findAll() {
-        return null;
+        return Flux.just(mike,sanaz);
     }
 }
